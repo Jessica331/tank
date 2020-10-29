@@ -8,7 +8,9 @@ import java.awt.event.WindowEvent;
 
 public class TankFrame extends Frame {
 
-    int x = 200, y=200;
+    int x = 200, y = 200;
+    Dir dir = Dir.DOWN;
+    private static final int SPEED = 10;
 
     public TankFrame() {
         // 设置窗口大小
@@ -36,9 +38,23 @@ public class TankFrame extends Frame {
     @Override
     public void paint(Graphics g) {
         g.fillRect(x, y, 50, 50);
-        //x += 10;
-        //y += 10;
 
+        switch (dir) {
+            case LEFT:
+                x -= SPEED;
+                break;
+            case RIGHT:
+                x += SPEED;
+                break;
+            case UP:
+                y -= SPEED;
+                break;
+            case DOWN:
+                y += SPEED;
+                break;
+            default:
+                break;
+        }
     }
 
     class MyKeyListener extends KeyAdapter {
@@ -54,13 +70,22 @@ public class TankFrame extends Frame {
             int key = e.getKeyCode();
 
             switch (key) {
-                case KeyEvent.VK_UP: tankUp = true; break;
-                case KeyEvent.VK_DOWN: tankDown =true; break;
-                case KeyEvent.VK_LEFT: tankLeft = true; break;
-                case KeyEvent.VK_RIGHT: tankRight = true; break;
+                case KeyEvent.VK_UP:
+                    tankUp = true;
+                    break;
+                case KeyEvent.VK_DOWN:
+                    tankDown =true;
+                    break;
+                case KeyEvent.VK_LEFT:
+                    tankLeft = true;
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    tankRight = true;
+                    break;
                 default: break;
             }
-            move();
+
+            setMainTankDir();
         }
 
         // 键抬起来 被调用
@@ -69,28 +94,33 @@ public class TankFrame extends Frame {
             int key = e.getKeyCode();
 
             switch (key) {
-                case KeyEvent.VK_UP: tankUp = false; break;
-                case KeyEvent.VK_DOWN: tankDown =false; break;
-                case KeyEvent.VK_LEFT: tankLeft = false; break;
-                case KeyEvent.VK_RIGHT: tankRight = false; break;
-                default: break;
+                case KeyEvent.VK_UP:
+                    tankUp = false;
+                    break;
+                case KeyEvent.VK_DOWN:
+                    tankDown =false;
+                    break;
+                case KeyEvent.VK_LEFT:
+                    tankLeft = false;
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    tankRight = false;
+                    break;
+                default:
+                    break;
             }
+
+            setMainTankDir();
         }
 
-        public void move() {
-            if (tankLeft) {
-                x -= 50;
-            }
-            if (tankRight) {
-                x += 50;
-            }
-            if (tankUp) {
-                y -= 50;
-            }
-            if (tankDown) {
-                y += 50;
-            }
+        public void setMainTankDir() {
+            if (tankUp) { dir = Dir.UP; }
+            if (tankDown) { dir = Dir.DOWN; }
+            if (tankLeft) { dir = Dir.LEFT; }
+            if (tankRight) { dir = Dir.RIGHT; }
+
         }
+
     }
 
 }
