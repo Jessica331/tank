@@ -8,17 +8,18 @@ import java.awt.event.WindowEvent;
 
 public class TankFrame extends Frame {
 
-    int x = 200, y = 200;
-    Dir dir = Dir.DOWN;
-    private static final int SPEED = 10;
+    Tank myTank = new Tank(200, 200, Dir.RIGHT);
 
     public TankFrame() {
         // 设置窗口大小
         setSize(800, 600);
+
         // 是否可以改变大小
         setResizable(false);
+
         // 填写标题
         setTitle("Tank War");
+
         // 可见
         setVisible(true);
 
@@ -37,24 +38,7 @@ public class TankFrame extends Frame {
 
     @Override
     public void paint(Graphics g) {
-        g.fillRect(x, y, 50, 50);
-
-        switch (dir) {
-            case LEFT:
-                x -= SPEED;
-                break;
-            case RIGHT:
-                x += SPEED;
-                break;
-            case UP:
-                y -= SPEED;
-                break;
-            case DOWN:
-                y += SPEED;
-                break;
-            default:
-                break;
-        }
+        myTank.paint(g);
     }
 
     class MyKeyListener extends KeyAdapter {
@@ -113,11 +97,18 @@ public class TankFrame extends Frame {
             setMainTankDir();
         }
 
+        // 设定方向
         public void setMainTankDir() {
-            if (tankUp) { dir = Dir.UP; }
-            if (tankDown) { dir = Dir.DOWN; }
-            if (tankLeft) { dir = Dir.LEFT; }
-            if (tankRight) { dir = Dir.RIGHT; }
+            if (!tankUp && !tankDown && !tankLeft && !tankRight) {
+                myTank.setMoving(false);
+            } else {
+                myTank.setMoving(true);
+
+                if (tankUp) { myTank.setDir(Dir.UP); }
+                if (tankDown) { myTank.setDir(Dir.DOWN);}
+                if (tankLeft) { myTank.setDir(Dir.LEFT);}
+                if (tankRight) { myTank.setDir(Dir.RIGHT); }
+            }
 
         }
 
