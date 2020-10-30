@@ -1,6 +1,7 @@
 package com.wangyp.tank;
 
 import java.awt.*;
+import java.util.ConcurrentModificationException;
 
 public class Bullet {
 
@@ -10,13 +11,24 @@ public class Bullet {
     private int x, y;
     private Dir dir;
 
-    public Bullet(int x, int y, Dir dir) {
+    private TankFrame tankFrame = null;
+
+    private boolean live = true;
+
+    public Bullet(int x, int y, Dir dir, TankFrame tankFrame) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.tankFrame = tankFrame;
     }
 
     public void paint(Graphics g) {
+
+        if (!live) {
+            //  ConcurrentModificationException
+            tankFrame.bullets.remove(this);
+        }
+
         Color color = g.getColor();
         g.setColor( Color.red );
         g.fillOval(x, y, WIDTH, HEIGHT);
@@ -44,6 +56,9 @@ public class Bullet {
                 break;
         }
 
+        if (x<0 || y<0 || x>TankFrame.GAME_WIDTH || y>TankFrame.GAME_HEIGHT) {
+            this.live = false;
+        }
     }
 
 }
